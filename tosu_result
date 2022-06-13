@@ -1,0 +1,52 @@
+import requests
+from requests_html import HTMLSession
+from bs4 import BeautifulSoup
+import re
+import datetime
+
+def main():
+    today = datetime.date.today()
+    #print(today)
+    team_name = []
+    team_score = []
+    #url = 'https://www.goal.com/jp/%E7%B5%90%E6%9E%9C/2022-05-18'
+    url = f'https://www.goal.com/jp/%E7%B5%90%E6%9E%9C/{today}'
+    session = HTMLSession()
+    r = session.get(url)
+    goals = r.html.find('.goals')
+    teams = r.html.find('.team-name')
+    
+    for team in teams:
+        team_name.append(team.text)
+    #print(len(team_name))
+    
+    for goal in goals:
+        team_score.append(goal.text)
+    #print(len(team_score))    
+    
+    ##False not in [i in 'サガン鳥栖' for i in team_name]
+    
+    if 'サガン鳥栖' not in team_name:
+        print('今日試合はありませんでした。')
+        
+    else:
+        tosu_index = team_name.index('サガン鳥栖') 
+        #print(tosu_index)
+        
+        if tosu_index % 2 == 0:
+            teki_index = tosu_index + 1
+        else:
+            teki_index = tosu_index - 1
+            
+        print(f'{team_name[tosu_index]}:{team_score[tosu_index]}点 vs {team_name[teki_index]}:{team_score[teki_index]}点')
+        
+        if team_score[tosu_index] > team_score[teki_index]:
+            print('WIN')
+        elif team_score[tosu_index] == team_score[teki_index]:
+            print('DROW')
+        else:
+            print('LOSE')
+
+
+if __name__ == '__main__':
+    main()
