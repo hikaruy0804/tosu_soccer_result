@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import re
 import datetime
 
-def main():
+def tosu_result():
     today = datetime.date.today()
     #print(today)
     team_name = []
@@ -47,6 +47,5 @@ def main():
         else:
             print('LOSE')
 
-
 if __name__ == '__main__':
-    main()
+    tosu_result()
